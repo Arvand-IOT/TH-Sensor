@@ -31,3 +31,5 @@ It's Arduino code for NodeMCU ESP8266 client. We have two branches:
 The _temperature_ and _humidity_ values will read every 30 seconds ( You can change the interval ) and publish to MQTT server if there are significant changes in them.
 
 ![result](.github/result.jpg)
+
+![result2](.github/result-2.jpg)
