@@ -7,8 +7,8 @@
 #define DHT_type DHTesp::DHT22
 
 String sensor_id = "4";
+String client_id = "NodeMCU_DHT22_";
 
-#define client_id "NodeMCU_DHT22"
 #define humidity_topic "humidity"
 #define temperature_topic "temperature"
 
@@ -50,7 +50,7 @@ void reconnect() {
     while (!client.connected()) {
         Serial.print("Attempting MQTT connection ...");
         
-        if (client.connect(client_id)) {
+        if (client.connect((client_id + sensor_id).c_str())) {
             Serial.println(" Connected");
             Serial.println("-----------------------------------------------");
         } else {
