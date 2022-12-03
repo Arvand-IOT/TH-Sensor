@@ -16,7 +16,8 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 DHTesp dht;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
     // Configure DHT
@@ -30,14 +31,16 @@ void setup() {
     client.setServer(mqtt_server, 1883);
 }
 
-void setup_wifi() {
+void setup_wifi()
+{
     delay(10);
 
     Serial.print("Attempting WiFi connection ...");
-    
+
     WiFi.begin(wifi_ssid, wifi_password);
-    
-    while (WiFi.status() != WL_CONNECTED) {
+
+    while (WiFi.status() != WL_CONNECTED)
+    {
         delay(500);
         Serial.print(".");
     }
@@ -45,15 +48,20 @@ void setup_wifi() {
     Serial.println(" Connected");
 }
 
-void reconnect() {
+void reconnect()
+{
     // Loop until we're reconnected
-    while (!client.connected()) {
+    while (!client.connected())
+    {
         Serial.print("Attempting MQTT connection ...");
-        
-        if (client.connect((client_id + sensor_id).c_str())) {
+
+        if (client.connect((client_id + sensor_id).c_str()))
+        {
             Serial.println(" Connected");
             Serial.println("-----------------------------------------------");
-        } else {
+        }
+        else
+        {
             Serial.print("Failed, rc=");
             Serial.print(client.state());
             Serial.println(" Try again in 5 seconds");
@@ -63,7 +71,8 @@ void reconnect() {
 }
 
 // Check for obvious changes ( Bigger than 1.0 )
-bool checkBound(float newValue, float prevValue, float maxDiff) {
+bool checkBound(float newValue, float prevValue, float maxDiff)
+{
     return newValue < prevValue - maxDiff || newValue > prevValue + maxDiff;
 }
 
@@ -73,16 +82,19 @@ float temp = 0.0;
 float hum = 0.0;
 float diff = 1.0;
 
-void loop() {
-    if (!client.connected()) {
+void loop()
+{
+    if (!client.connected())
+    {
         reconnect();
     }
-    
+
     client.loop();
 
     unsigned long now = millis();
-    
-    if (now - last_msg > interval) {
+
+    if (now - last_msg > interval)
+    {
         last_msg = now;
 
         // Read sensor data
@@ -91,7 +103,8 @@ void loop() {
         Serial.print("Sensor Status : ");
         Serial.println(dht.getStatusString());
 
-        if (checkBound(newTemp, temp, diff)) {
+        if (checkBound(newTemp, temp, diff))
+        {
             temp = newTemp;
             String tmp_msg;
             tmp_msg = sensor_id + ":" + String(temp);
@@ -100,7 +113,8 @@ void loop() {
             client.publish(temperature_topic, tmp_msg.c_str(), true);
         }
 
-        if (checkBound(newHum, hum, diff)) {
+        if (checkBound(newHum, hum, diff))
+        {
             hum = newHum;
             String hum_msg;
             hum_msg = sensor_id + ":" + String(hum);
